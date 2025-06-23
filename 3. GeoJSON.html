@@ -1,0 +1,826 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. GeoJSON &#8212; Mapping Tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3. GeoJSON';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Geocoding" href="4.%20Geocoding.html" />
+    <link rel="prev" title="2. Additional Layers" href="2.%20Additional%20Layers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="Introduction.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Mapping Tutorial - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Mapping Tutorial - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="Introduction.html">
+                    Mapping tutorial
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.%20Basemaps.html">1. Base maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.%20Additional%20Layers.html">2. Additional Layers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. GeoJSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.%20Geocoding.html">4. Geocoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solutions.html">Solutions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cdsleiden/textmining-tutorial/tree/main" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cdsleiden/textmining-tutorial/tree/main/issues/new?title=Issue%20on%20page%20%2F3. GeoJSON.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/3. GeoJSON.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>3. GeoJSON</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-1">Exercise 3.1.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-2">Exercise 3.2.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-choropeth-map">A Choropeth map</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-3">Exercise 3.3.</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">folium</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="geojson">
+<h1>3. GeoJSON<a class="headerlink" href="#geojson" title="Link to this heading">#</a></h1>
+<p>In the previous section, you saw that you can use add <code class="docutils literal notranslate"><span class="pre">Marker</span></code>s and <code class="docutils literal notranslate"><span class="pre">Cicle</span></code>s to a base map. The code that was discussed added all of these components one by one, on separate lines of code.</p>
+<p>This process of adding layers to a map can also take place in a more efficient way, by firstly making one large file containing all the items you want to work with. As a subsequent step, all of these layers described in this file can then be added to the map in one go, using one basic command.</p>
+<p>Files of this nature can be made using the specifications defined in the <a class="reference external" href="https://geojson.org/">GeoJSON</a> format. It is commonly used open format for capturing geospatial data. Its syntax is based on the [JavaScript Object Notation](JavaScript Object Notation) standard.</p>
+<p>GeoJSON support a number of different geometry types, including points, lineStings and Polygons.</p>
+<p>You can find an example of a relatively simple GeoJson file below. This file describes specific location in New York City.</p>
+<p>As you can hopefully see, the file describes two geometry types: (1) a Point and (2) a Polygon. The Polygon is actually a collection of five coordinates.</p>
+<p>Some properties have also been defined for these shapes. There is a <code class="docutils literal notranslate"><span class="pre">name</span></code> property, which has been given a certain value. The polygon indicated the location of Central Park.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Rockefeller Center&quot;</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="o">-</span><span class="mf">73.98007794763497</span><span class="p">,</span>
+          <span class="mf">40.75930179605277</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Central Park&quot;</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">[</span>
+            <span class="p">[</span>
+              <span class="o">-</span><span class="mf">73.98165063573659</span><span class="p">,</span>
+              <span class="mf">40.768289015184195</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+              <span class="o">-</span><span class="mf">73.97305016654792</span><span class="p">,</span>
+              <span class="mf">40.76450037197216</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+              <span class="o">-</span><span class="mf">73.94943376523811</span><span class="p">,</span>
+              <span class="mf">40.797128471256</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+              <span class="o">-</span><span class="mf">73.95817399149345</span><span class="p">,</span>
+              <span class="mf">40.80094836642937</span>
+            <span class="p">],</span>
+            <span class="p">[</span>
+              <span class="o">-</span><span class="mf">73.98165063573659</span><span class="p">,</span>
+              <span class="mf">40.768289015184195</span>
+            <span class="p">]</span>
+          <span class="p">]</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Polygon&quot;</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This sample GeoJSON is included in the folder you included for this course. It save in a file names ‘new_york.geojson’.</p>
+<p>The information from the GeoJSON file can be added using the <code class="docutils literal notranslate"><span class="pre">GeoJson</span></code> object.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">map_url</span> <span class="o">=</span> <span class="s1">&#39;https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/</span><span class="si">{z}</span><span class="s1">/</span><span class="si">{y}</span><span class="s1">/</span><span class="si">{x}</span><span class="s1">&#39;</span>
+<span class="n">attribution</span><span class="o">=</span> <span class="s1">&#39;Tiles &amp;copy; Esri &amp;mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012&#39;</span>
+
+<span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">40.78157518113839</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.96629142372429</span><span class="p">],</span>
+                <span class="n">zoom_start</span> <span class="o">=</span> <span class="mi">12</span> <span class="p">,</span> 
+                 <span class="n">tiles</span> <span class="o">=</span>  <span class="n">map_url</span> <span class="p">,</span> <span class="n">attr</span> <span class="o">=</span> <span class="n">attribution</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span> <span class="s2">&quot;new_york.geojson&quot;</span> <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
+<span class="nb">map</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can adjust the presentation of the features, using the stylefunction parameter. The following properties are available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fillColor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight</span></code></p></li>
+</ul>
+<p>If you have labels you want to use as popups, you can work with the <code class="docutils literal notranslate"><span class="pre">GeoJsonPopup</span></code> object from the <code class="docutils literal notranslate"><span class="pre">features</span></code> module.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">folium</span>
+<span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">GeoJson</span>
+
+<span class="n">fa_icon</span> <span class="o">=</span> <span class="s1">&#39;fa-asterisk&#39;</span>
+<span class="n">custom_color</span> <span class="o">=</span> <span class="s1">&#39;darkred&#39;</span>
+
+<span class="n">custom_icon</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Icon</span><span class="p">(</span><span class="n">icon</span><span class="o">=</span> <span class="n">fa_icon</span> <span class="p">,</span> <span class="n">color</span><span class="o">=</span> <span class="n">custom_color</span> <span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;fa&#39;</span> <span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+
+
+<span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">40.771672371640875</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.97480715725173</span><span class="p">],</span>
+                <span class="n">zoom_start</span> <span class="o">=</span> <span class="mi">13</span> <span class="p">,</span> 
+                 <span class="n">tiles</span> <span class="o">=</span>  <span class="s1">&#39;OpenStreetMap&#39;</span> <span class="p">)</span>
+
+<span class="n">gj</span> <span class="o">=</span> <span class="n">GeoJson</span><span class="p">(</span><span class="s1">&#39;new_york.geojson&#39;</span> <span class="p">,</span> 
+       <span class="n">marker</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span> <span class="n">icon</span> <span class="o">=</span> <span class="n">custom_icon</span><span class="p">)</span> <span class="p">,</span>             
+       <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feature</span><span class="p">:</span> <span class="p">{</span>    
+        <span class="s1">&#39;fillColor&#39;</span><span class="p">:</span> <span class="s1">&#39;#120f7a&#39;</span><span class="p">,</span>           
+        <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#366944&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">})</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJsonPopup</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">gj</span><span class="p">)</span>
+
+<span class="nb">map</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can imagine, GeoJson code is usually not typed in manually. They are often generated using tools.</p>
+<p>One very helpful tool in this context is <a class="reference internal" href="#geojson.io"><span class="xref myst">geojson.io</span></a>. Using the tools that are provided to the right of the screen, you can add some shapes such as polygons, lines and points to a map.</p>
+<p>If you click on one of the geometry types added to the map, you can also add properties, such as a <code class="docutils literal notranslate"><span class="pre">name</span></code>, or a <code class="docutils literal notranslate"><span class="pre">class</span></code>. you are free to choose these property names yourself.</p>
+<p>Once you have added all the components you need, you can export all of these layers to a GeoJSON file. Click on ‘Save’ &gt; ‘GeoJSon’. The export will be saved under the name ‘map.geojson’ by default, but you can obviously rename this file. The export will usually be downloaded to the “Downloads” folder.</p>
+<section id="exercise-3-1">
+<h2>Exercise 3.1.<a class="headerlink" href="#exercise-3-1" title="Link to this heading">#</a></h2>
+<p>Open the file named ‘new_york.geojson’ in <a class="reference internal" href="#geojson.io"><span class="xref myst">geojson.io</span></a>. Next, add a number of geometrical types to the map, such as a line, a point or a polygon. Also add <code class="docutils literal notranslate"><span class="pre">name</span></code> properties to describe the locations you added.</p>
+<p>After this, export the updated file, and save the export as ‘new_york_updated’. Finally, visualise the newly created GeoJson file via <em>Leaflet</em>. Note that the code below writes the result to a file named ‘new_york.html’. You can open this file is a web browser.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">folium</span>
+<span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">GeoJson</span>
+
+<span class="n">map_url</span> <span class="o">=</span> <span class="s1">&#39;https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/</span><span class="si">{z}</span><span class="s1">/</span><span class="si">{y}</span><span class="s1">/</span><span class="si">{x}</span><span class="s1">&#39;</span>
+<span class="n">attribution</span> <span class="o">=</span> <span class="s1">&#39;Tiles &amp;copy; Esri &amp;mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012&#39;</span>
+
+<span class="n">fa_icon</span> <span class="o">=</span> <span class="s1">&#39;fa-asterisk&#39;</span>
+<span class="n">custom_color</span> <span class="o">=</span> <span class="s1">&#39;darkred&#39;</span>
+
+<span class="n">custom_icon</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Icon</span><span class="p">(</span><span class="n">icon</span><span class="o">=</span> <span class="n">fa_icon</span> <span class="p">,</span> <span class="n">color</span><span class="o">=</span> <span class="n">custom_color</span> <span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;fa&#39;</span> <span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+
+
+<span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">40.771672371640875</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.97480715725173</span><span class="p">],</span>
+                <span class="n">zoom_start</span> <span class="o">=</span> <span class="mi">13</span> <span class="p">,</span> 
+                 <span class="n">tiles</span> <span class="o">=</span>  <span class="n">map_url</span> <span class="p">,</span> <span class="n">attr</span> <span class="o">=</span> <span class="n">attribution</span> <span class="p">)</span>
+
+<span class="n">gj</span> <span class="o">=</span> <span class="n">GeoJson</span><span class="p">(</span><span class="s1">&#39;new_york_updated.geojson&#39;</span> <span class="p">,</span> 
+       <span class="n">marker</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span> <span class="n">icon</span> <span class="o">=</span> <span class="n">custom_icon</span><span class="p">)</span> <span class="p">,</span>             
+       <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feature</span><span class="p">:</span> <span class="p">{</span>    
+        <span class="s1">&#39;fillColor&#39;</span><span class="p">:</span> <span class="s1">&#39;#120f7a&#39;</span><span class="p">,</span>           
+        <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#366944&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">})</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJsonPopup</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">gj</span><span class="p">)</span>
+
+<span class="nb">map</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;new_york.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-2">
+<h2>Exercise 3.2.<a class="headerlink" href="#exercise-3-2" title="Link to this heading">#</a></h2>
+<p>The file ‘nl.geojson’ contains polygons depicting all the provinces of the netherlands and markers for a number of cities. The file has been downloaded from <a class="reference external" href="https://cartographyvectors.com/">Carthography Vectors</a>.</p>
+<p>Open the file ‘nl.geojson’ in <a class="reference internal" href="#geojson.io"><span class="xref myst">geojson.io</span></a> and try to add markers for at least three other Dutch cities. Also added a <code class="docutils literal notranslate"><span class="pre">name</span></code> property to record the names of these cities. Export you work. You can work as ‘nl_updated.geojson’.</p>
+<p>Next, present all the data from this GeoJSON file on a <em>Leaflet</em> map. Try to show the provinces in a light red colour. You can use the code below as a basis. Note that the <code class="docutils literal notranslate"><span class="pre">GeoJson</span></code> object works with the <code class="docutils literal notranslate"><span class="pre">zoom_on_click</span></code> parameter, which is set to true. This parameter will have the effect that users can automatically zoom in onto the region they click on.</p>
+<p>Add tooltips displaying the names of the cities and the provinces using <code class="docutils literal notranslate"><span class="pre">GeoJsonTooltip</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">GeoJson</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mf">52.17730033847493</span><span class="p">,</span><span class="mf">4.537353515625001</span><span class="p">],</span> 
+            <span class="n">zoom_start</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">gj</span> <span class="o">=</span> <span class="n">GeoJson</span><span class="p">(</span><span class="s1">&#39;nl.geojson&#39;</span> <span class="p">,</span> 
+        <span class="n">zoom_on_click</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">,</span>
+       <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feature</span><span class="p">:</span> <span class="p">{</span>    
+        <span class="s1">&#39;fillColor&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>           
+        <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">})</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJsonTooltip</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">gj</span><span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;nl.html&#39;</span><span class="p">)</span>
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-choropeth-map">
+<h2>A Choropeth map<a class="headerlink" href="#a-choropeth-map" title="Link to this heading">#</a></h2>
+<p>If you have GeoJSON files delineating specific regions, together with quantitative data about these regions, it becomes possible to create a Choropeth map. On such a choropeth map, different areas or regions are presented in diffetent colours, or in diofferent shades of a colour, in such a way that these colours clarify the values for a specific variable.  In this way, choropeth maps allow for a quick visual comparison of these regions.</p>
+<p>The collection of files you downloaded for this course includes a CSV file named ‘nl_population.csv’. This file offers information about the number of inhabitants of each province of The Netherlands. The dataset has two columns: ‘name’ and ‘population’. The data have been copied from <a class="reference external" href="https://www.wikidata.org/wiki/Wikidata:Main_Page">WIkidata</a>.</p>
+<p>The code below reads in the dataset and creates a <code class="docutils literal notranslate"><span class="pre">Pandas</span></code> dataframe named ‘provinces’.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">provinces</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;nl_population.csv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">provinces</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As mentioned, we can bring polygons representing regions and quantitative data about these regions together in a chloropeth map.</p>
+<p>To do this, you need to make sure, firstly, that there is a value in the first data set which uniquely identifies each region. This may be code, or a name, provided that this name is unique. Additionally, you need to ensure that these same identifiers are used in the second dataset. If the two dataset share the same identifiers for the regions, the data sets can be connected.</p>
+<p>The code below creates a choropeth map in which the colours of the regions convery information about the population. The regions can be drawn, as we saw, by making use of the data in ‘nl.geojsopn’. If you open ‘nl.geojson’ in <a class="reference internal" href="#geojson.io"><span class="xref myst">geojson.io</span></a>, you can see that each province has been given a name. This name is captured in a property called ‘name’. We can assume that the names of provinces are unique. These exact same names also occur in the CSV file named ‘nl_provinces’, so we can use these values to establish links between the two datasets.</p>
+<p>A folium <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code> object demands the following parameters:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">geodata</span></code> parameter should specify the GeoJSON file containing the geographic information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> must refer to the pandas dataframe containing the data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">columns</span></code> refers to the columns in the datadrame that need to be visualised. The first of these columns should be the identifier, and the second column should contain the values to be represented.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key_on</span></code> explains how the two data sets can be connected. More specifically, you need to refer to the property (typically given underneath ‘feature.properties’) which acts as an identifier.</p></li>
+<li><p>The values for the <code class="docutils literal notranslate"><span class="pre">fill_opacity</span></code> and the <code class="docutils literal notranslate"><span class="pre">line_opacity</span></code> determine the opacity. The higher the value, the lower the level of transparency.</p></li>
+<li><p>Under <code class="docutils literal notranslate"><span class="pre">fill_color</span></code>, we can supply a colour range.</p></li>
+</ul>
+<p>As options for the <code class="docutils literal notranslate"><span class="pre">full_color</span></code>, we can choose from the following list.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;BuGn&#39;</span><span class="p">,</span> <span class="s1">&#39;BuPu&#39;</span><span class="p">,</span> <span class="s1">&#39;GnBu&#39;</span><span class="p">,</span> <span class="s1">&#39;OrRd&#39;</span><span class="p">,</span> <span class="s1">&#39;PuBu&#39;</span><span class="p">,</span> <span class="s1">&#39;PuBuGn&#39;</span><span class="p">,</span> <span class="s1">&#39;PuRd&#39;</span><span class="p">,</span> <span class="s1">&#39;RdPu&#39;</span><span class="p">,</span> <span class="s1">&#39;YlGn&#39;</span><span class="p">,</span> <span class="s1">&#39;YlGnBu&#39;</span><span class="p">,</span> <span class="s1">&#39;YlOrBr&#39;</span><span class="p">,</span> <span class="s1">&#39;YlOrRd&#39;</span><span class="p">,</span> <span class="s1">&#39;BrBg&#39;</span><span class="p">,</span> <span class="s1">&#39;PiYG&#39;</span><span class="p">,</span> <span class="s1">&#39;PRGn&#39;</span><span class="p">,</span> <span class="s1">&#39;PuOr&#39;</span><span class="p">,</span> <span class="s1">&#39;RdBu&#39;</span><span class="p">,</span> <span class="s1">&#39;RdGy&#39;</span><span class="p">,</span> <span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span> <span class="s1">&#39;RdYlGn&#39;</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">GeoJson</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mf">52.17730033847493</span><span class="p">,</span><span class="mf">4.537353515625001</span><span class="p">],</span> 
+            <span class="n">zoom_start</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+
+<span class="n">cp</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+    <span class="n">geo_data</span><span class="o">=</span> <span class="s1">&#39;nl.geojson&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span> <span class="n">provinces</span> <span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;population&quot;</span><span class="p">],</span>
+    <span class="n">key_on</span><span class="o">=</span><span class="s2">&quot;feature.properties.name&quot;</span><span class="p">,</span>
+    <span class="n">fill_color</span><span class="o">=</span><span class="s2">&quot;PuBu&quot;</span><span class="p">,</span>
+    <span class="n">fill_opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">line_opacity</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">legend_name</span><span class="o">=</span><span class="s2">&quot;population&quot;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJsonTooltip</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">geojson</span><span class="p">)</span>
+
+
+<span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;cp.html&#39;</span><span class="p">)</span>
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="exercise-3-3">
+<h3>Exercise 3.3.<a class="headerlink" href="#exercise-3-3" title="Link to this heading">#</a></h3>
+<p>PISA is the OECD’s <a class="reference external" href="https://www.oecd.org/pisa/">Programme for International Student Assessment</a>. This programme evaluates educational systems globally by measuring the performance of 15 year-old-children in mathematics, science and reading. The latest study is from 2018.</p>
+<p>The folder prepared for this course includes a CSV file named ‘pisa_read.csv’. It contains all the PISA scores given for reading in 2018 in Europe.</p>
+<p>The GeoJSON file named ‘europe.geojson’ contains polygons representing all European countries. The data have been downloaded form the <a class="reference external" href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/countries">GISCO EU website</a>.</p>
+<p>Try to visualise the PISA scores for reading on a map using a Choropleth.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pisa</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;pisa_read.csv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pisa</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see in the output of the code above, the PISA_read dataset only contains the names of the countries. This means that we should link this CSV file to the GeoJSON file on the basis of the country names.</p>
+<p>Next, open the file ‘europe.geojson’ in <a class="reference internal" href="#geojson.io"><span class="xref myst">geojson.io</span></a> and try to find the name of the property containing the names of the countries. Add this column name to the value <code class="docutils literal notranslate"><span class="pre">feature.properties</span></code>. This value needs to be provided as the value of the <code class="docutils literal notranslate"><span class="pre">key_on</span></code> parameter. Note that columns names are case sensitive!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">GeoJson</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mf">49.553726</span><span class="p">,</span><span class="mf">18.017578</span><span class="p">],</span> 
+            <span class="n">zoom_start</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">cp</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+    <span class="n">geo_data</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">key_on</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">fill_color</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+    <span class="n">fill_opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">line_opacity</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">nan_fill_color</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">,</span>
+    <span class="n">nan_fill_opacity</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span>
+    <span class="n">legend_name</span><span class="o">=</span><span class="s2">&quot;pisa score&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">GeoJsonTooltip</span><span class="p">([</span><span class="s1">&#39;NAME&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">geojson</span><span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;pisa.html&#39;</span><span class="p">)</span>
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2.%20Additional%20Layers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">2. Additional Layers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4.%20Geocoding.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">4. Geocoding</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-1">Exercise 3.1.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-2">Exercise 3.2.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-choropeth-map">A Choropeth map</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-3">Exercise 3.3.</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Peter Verhaar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png"></a>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
